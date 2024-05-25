@@ -180,21 +180,28 @@ export default {
 
     // store product into database
     saveProduct() {
-      let product = {
-        title: this.product_name,
-        sku: this.product_sku,
-        description: this.description,
-        product_image: this.images,
-        product_variant: this.product_variant,
-        product_variant_prices: this.product_variant_prices
-      }
+      let productData = {
+    title: this.product_name,
+    sku: this.product_sku,
+    description: this.description,
+    product_variant: this.product_variant.map(item => {
+      return {
+        option: item.option,
+        tags: item.tags
+      };
+    }),
+    product_variant_prices: this.product_variant_prices
+  };
 
-
-      axios.post('/product', product).then(response => {
-        console.log(response.data);
-      }).catch(error => {
-        console.log(error);
-      })
+  axios.post('/api/products/', productData)
+    .then(response => {
+      console.log('Product created:', response.data);
+      // Optionally, perform additional actions after successful creation
+    })
+    .catch(error => {
+      console.error('Error creating product:', error);
+      // Handle error response
+    });
 
       console.log(product);
     }

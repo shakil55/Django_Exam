@@ -1,0 +1,64 @@
+{% extends 'backend/base.html' %}
+
+{% block content %}
+    <h1>Product List</h1>
+    <input type="text" id="title-filter" placeholder="Filter by Title">
+    <input type="text" id="color-filter" placeholder="Filter by Color">
+    <input type="date" id="date-filter" placeholder="Filter by Date">
+
+    <table id="product-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>SKU</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for product in products %}
+                <tr data-title="{{ product.title }}" data-color="{{ product.color }}" data-date="{{ product.date }}">
+                    <td>{{ product.id }}</td>
+                    <td>{{ product.title }}</td>
+                    <td>{{ product.sku }}</td>
+                    <td>{{ product.description }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const titleFilter = document.getElementById('title-filter');
+            const colorFilter = document.getElementById('color-filter');
+            const dateFilter = document.getElementById('date-filter');
+            const rows = document.querySelectorAll('#product-table tbody tr');
+
+            function filterProducts() {
+                const titleValue = titleFilter.value.toLowerCase();
+                const colorValue = colorFilter.value.toLowerCase();
+                const dateValue = dateFilter.value;
+
+                rows.forEach(row => {
+                    const title = row.dataset.title.toLowerCase();
+                    const color = row.dataset.color.toLowerCase();
+                    const date = row.dataset.date;
+
+                    const titleMatch = title.includes(titleValue);
+                    const colorMatch = color.includes(colorValue);
+                    const dateMatch = date === dateValue || !dateValue;
+
+                    if (titleMatch && colorMatch && dateMatch) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+
+            titleFilter.addEventListener('input', filterProducts);
+            colorFilter.addEventListener('input', filterProducts);
+            dateFilter.addEventListener('change', filterProducts);
+        });
+    </script>
+{% endblock %}

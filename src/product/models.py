@@ -3,17 +3,24 @@ from config.g_model import TimeStampMixin
 
 
 # Create your models here.
-class Variant(TimeStampMixin):
-    title = models.CharField(max_length=40, unique=True)
-    description = models.TextField()
+from django.db import models
+
+class Variant(models.Model):
+    title = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
     active = models.BooleanField(default=True)
 
+    def __str__(self):
+        return self.title
 
-class Product(TimeStampMixin):
+class Product(models.Model):
     title = models.CharField(max_length=255)
-    sku = models.SlugField(max_length=255, unique=True)
-    description = models.TextField()
+    sku = models.CharField(max_length=255, unique=True)
+    description = models.TextField(blank=True)
+    variants = models.ManyToManyField(Variant, blank=True)
 
+    def __str__(self):
+        return self.title
 
 class ProductImage(TimeStampMixin):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)

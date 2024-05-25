@@ -1,14 +1,23 @@
-from django.forms import forms, ModelForm, CharField, TextInput, Textarea, BooleanField, CheckboxInput
 
-from product.models import Variant
+from django import forms 
+from product.models import Product, Variant  
 
+class ProductForm(forms.ModelForm):
+    variants = forms.ModelChoiceField(queryset=Variant.objects.filter(active=True), required=False)  
 
-class VariantForm(ModelForm):
+    class Meta:
+        model = Product
+        fields = ('title', 'sku', 'description', 'variants')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Populate choices for variants field dynamically
+        self.fields['variants'].queryset = Variant.objects.filter(active=True)
+
+class VariantForm(forms.ModelForm):
     class Meta:
         model = Variant
-        fields = '__all__'
-        widgets = {
-            'title': TextInput(attrs={'class': 'form-control'}),
-            'description': Textarea(attrs={'class': 'form-control'}),
-            'active': CheckboxInput(attrs={'class': 'form-check-input', 'id': 'active'})
-        }
+        fields = ('title', 'description', 'active') 
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)

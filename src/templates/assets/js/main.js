@@ -3,11 +3,11 @@ import 'startbootstrap-sb-admin-2/js/sb-admin-2'
 import Vue from 'vue';
 
 import '../scss/main.scss'
-
+import CreateProductForm from './components/product/CreateProductForm.vue'
 window.Vue = Vue
-
+Vue.component('create-product-form', CreateProductForm)
 Vue.component('create-product', require('./components/product/CreateProduct.vue').default)
 
 const main = new Vue({
-    el: '#app'
+    // el: '#app'
 })

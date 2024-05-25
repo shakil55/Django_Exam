@@ -13,7 +13,7 @@ class BaseVariantView(generic.View):
 
 
 class VariantView(BaseVariantView, ListView):
-    template_name = 'variants/list.html'
+    template_name = 'backend/products/variant_list.html'
     paginate_by = 10
 
     def get_queryset(self):
